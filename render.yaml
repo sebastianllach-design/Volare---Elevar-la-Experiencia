@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: volare-evento-3010
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
