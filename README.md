@@ -1,15 +1,12 @@
-# Volare - Landing evento 30.10.26
+# Landing Encuentro Volare 30.10.26
 
-Versión de validación enfocada únicamente en información necesaria para el público:
-- Presentación del evento
-- Agenda
-- Información práctica
-- Confirmación de asistencia
+Paquete listo para GitHub / Render.
 
-## Render
-Puede publicarse como Static Site. La raíz del proyecto contiene `index.html` y la carpeta `assets/`.
+## Actualización incluida
+- Logo oficial Volare Canning tomado del archivo provisto por el cliente.
+- Logo utilizado en navegación, hero y footer.
+- Favicon generado desde la gaviota del mismo logo oficial.
+- Revisión responsive para celular: navegación, hero, agenda, información, CTA, modal y footer.
 
-## Pendiente antes de publicación
-- Confirmar URL exacta de Google Maps de Espacio Marfil.
-- Conectar formulario RSVP a la fuente definitiva (Google Forms, Firebase, Formspree u otro endpoint).
-- Validar horarios finales de los bloques posteriores a las 19:15.
+## Publicación
+Reemplazar el contenido actual del repositorio por estos archivos y hacer commit/push sobre la rama conectada a Render.
