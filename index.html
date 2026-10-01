@@ -84,7 +84,7 @@
 
     footer{background:#09162d;color:rgba(255,255,255,.65);padding:34px 5vw;display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:12px;letter-spacing:.04em}footer img{width:96px;height:auto}footer a{color:#d9c182}
 
-    .modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.backdrop{position:absolute;inset:0;background:rgba(3,11,25,.78);backdrop-filter:blur(10px)}.modal-card{position:relative;width:min(560px,96vw);max-height:92vh;overflow:auto;border-radius:24px;background:#f7f1e8;padding:34px;box-shadow:0 40px 90px rgba(0,0,0,.35)}.close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#142241;font-size:30px;cursor:pointer}.modal-card h3{font-size:42px;line-height:1;margin:12px 0 24px}.form-grid{display:grid;gap:14px}.form-grid label{font-size:12px;color:#5d5a55}.form-grid input,.form-grid select{width:100%;margin-top:7px;border:1px solid #d7cdbd;background:#fffdf9;border-radius:12px;padding:13px 14px;color:#142241;outline:none}.form-grid input:focus,.form-grid select:focus{border-color:#b79043;box-shadow:0 0 0 3px rgba(183,144,67,.12)}.success{display:none;text-align:center;padding:24px}.success.show{display:block}.success-mark{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;background:#17345e;color:#e2c987;font-size:28px}
+    .modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.backdrop{position:absolute;inset:0;background:rgba(3,11,25,.78);backdrop-filter:blur(10px)}.modal-card{position:relative;width:min(560px,96vw);max-height:92vh;overflow:auto;border-radius:24px;background:#f7f1e8;padding:34px;box-shadow:0 40px 90px rgba(0,0,0,.35)}.close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#142241;font-size:30px;cursor:pointer}.modal-card h3{font-size:42px;line-height:1;margin:12px 0 24px}.form-grid{display:grid;gap:14px}.form-grid label{font-size:12px;color:#5d5a55}.form-grid input,.form-grid select,.form-grid textarea{width:100%;margin-top:7px;border:1px solid #d7cdbd;background:#fffdf9;border-radius:12px;padding:13px 14px;color:#142241;outline:none}.form-grid textarea{min-height:86px;resize:vertical;line-height:1.45}.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{border-color:#b79043;box-shadow:0 0 0 3px rgba(183,144,67,.12)}.form-grid .hint{display:block;margin-top:5px;color:#8a8378;font-size:11px;line-height:1.4}.submit-status{display:none;margin:2px 0 0;text-align:center;font-size:12px;line-height:1.45;color:#7a2f2f}.submit-status.show{display:block}.btn[disabled]{opacity:.65;cursor:wait;transform:none!important;box-shadow:none!important}.success{display:none;text-align:center;padding:24px}.success.show{display:block}.success-mark{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;background:#17345e;color:#e2c987;font-size:28px}
 
     .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}
 
@@ -105,7 +105,7 @@
       .info-grid{grid-template-columns:1fr;margin-top:36px}.info-card{min-height:142px;padding:22px;border-radius:18px}.info-card b{font-size:24px}.info-callout{padding:22px 20px;gap:20px}.info-callout strong{font-size:22px}.info-callout .btn{width:100%}
       .rsvp{padding:72px 18px}.rsvp h2{font-size:clamp(38px,11vw,47px);line-height:1.02}.rsvp p{font-size:16px;line-height:1.55}.rsvp .btn{width:min(100%,320px)}.rsvp::before{font-size:270px;right:-20px;top:-70px}
       footer{padding:30px 18px;gap:14px}footer img{width:100px}
-      .modal{padding:12px;align-items:flex-end}.modal-card{width:100%;max-height:92dvh;border-radius:22px 22px 14px 14px;padding:30px 18px 22px}.modal-card h3{font-size:34px;line-height:1.02;margin:12px 0 22px}.close{right:12px;top:8px;font-size:34px}.form-grid{gap:12px}.form-grid input,.form-grid select{font-size:16px;padding:14px}.form-grid .btn{width:100%;margin-top:4px}
+      .modal{padding:12px;align-items:flex-end}.modal-card{width:100%;max-height:92dvh;border-radius:22px 22px 14px 14px;padding:30px 18px 22px}.modal-card h3{font-size:34px;line-height:1.02;margin:12px 0 22px}.close{right:12px;top:8px;font-size:34px}.form-grid{gap:12px}.form-grid input,.form-grid select,.form-grid textarea{font-size:16px;padding:14px}.form-grid textarea{min-height:90px}.form-grid .btn{width:100%;margin-top:4px}
     }
     @media(max-width:380px){
       .topbar{padding:0 13px}.brand img{width:76px}.nav .cta{padding:8px 11px}
@@ -241,11 +241,16 @@
         <div class="label">Confirmación de asistencia</div>
         <h3 id="modalTitle">Nos encontramos<br>el 30 de octubre.</h3>
         <form id="rsvpForm" class="form-grid">
-          <label>Nombre y apellido<input type="text" name="name" required placeholder="Tu nombre"></label>
-          <label>Organización / comercio<input type="text" name="organization" placeholder="Nombre de la organización"></label>
-          <label>Correo electrónico<input type="email" name="email" required placeholder="tu@email.com"></label>
-          <label>Vínculo con Volare<select name="role" required><option value="">Seleccionar</option><option>Inversor / propietario</option><option>Comerciante</option><option>Equipo de un comercio</option><option>Equipo Volare</option><option>Proveedor / aliado</option><option>Invitado</option></select></label>
-          <button class="btn btn-gold" type="submit">Confirmar asistencia</button>
+          <label>Nombre y apellido<input type="text" name="nombre" required autocomplete="name" placeholder="Tu nombre y apellido"></label>
+          <label>Empresa / comercio<input type="text" name="empresa" autocomplete="organization" placeholder="Nombre de la empresa o comercio"></label>
+          <label>Correo electrónico<input type="email" name="email" required autocomplete="email" placeholder="tu@email.com"></label>
+          <label>Teléfono<input type="tel" name="telefono" required autocomplete="tel" inputmode="tel" placeholder="Ej. 11 5555 5555"></label>
+          <label>Vínculo con Volare<select name="rol" required><option value="">Seleccionar</option><option>Inversor / propietario</option><option>Comerciante</option><option>Equipo de un comercio</option><option>Equipo Volare</option><option>Proveedor / aliado</option><option>Invitado</option></select></label>
+          <label>Cantidad de asistentes<select name="cantidad" required><option value="1">1 persona</option><option value="2">2 personas</option><option value="3">3 personas</option><option value="4">4 personas</option><option value="5">5 personas</option></select><span class="hint">Incluyéndote a vos.</span></label>
+          <label>Restricciones alimentarias<textarea name="restricciones" placeholder="Ej. celiaquía, vegetariano, alergias. Si no tenés, podés dejarlo en blanco."></textarea></label>
+          <label>Observaciones<textarea name="observaciones" placeholder="Cualquier información que consideres importante para el encuentro."></textarea></label>
+          <div class="submit-status" id="submitStatus" role="alert"></div>
+          <button class="btn btn-gold" id="submitButton" type="submit">Confirmar asistencia</button>
         </form>
       </div>
       <div class="success" id="success"><div class="success-mark">✓</div><h3>Asistencia registrada.</h3><p>Gracias. Nos encontramos el 30 de octubre.</p></div>
@@ -261,6 +266,9 @@
     const form=document.getElementById('rsvpForm');
     const formWrap=document.getElementById('formWrap');
     const success=document.getElementById('success');
+    const submitButton=document.getElementById('submitButton');
+    const submitStatus=document.getElementById('submitStatus');
+    const RSVP_ENDPOINT='https://script.google.com/a/macros/gruposetlatam.com/s/AKfycbykezn2lqdtZwAZ9a7dtD-XhD8R-8VmNrbZB_VZYk9KFBv0n6X_SeKQxqYOQvZRFMy5oA/exec';
 
     function onScroll(){
       topbar.classList.toggle('scrolled',window.scrollY>30);
@@ -276,11 +284,45 @@
     closeButtons.forEach(b=>b.addEventListener('click',()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}));
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}});
 
-    form.addEventListener('submit',e=>{
+    form.addEventListener('submit',async e=>{
       e.preventDefault();
-      const data=Object.fromEntries(new FormData(form).entries());
-      localStorage.setItem('volare-rsvp-preview',JSON.stringify({...data,submittedAt:new Date().toISOString()}));
-      formWrap.style.display='none'; success.classList.add('show');
+      submitStatus.classList.remove('show');
+      submitStatus.textContent='';
+      submitButton.disabled=true;
+      const originalText=submitButton.textContent;
+      submitButton.textContent='Registrando...';
+
+      const raw=Object.fromEntries(new FormData(form).entries());
+      const payload={
+        nombre:(raw.nombre||'').trim(),
+        empresa:(raw.empresa||'').trim(),
+        email:(raw.email||'').trim(),
+        telefono:(raw.telefono||'').trim(),
+        rol:raw.rol||'',
+        cantidad:raw.cantidad||'1',
+        restricciones:(raw.restricciones||'').trim(),
+        observaciones:(raw.observaciones||'').trim(),
+        estado:'Confirmada'
+      };
+
+      try{
+        await fetch(RSVP_ENDPOINT,{
+          method:'POST',
+          mode:'no-cors',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify(payload)
+        });
+        localStorage.setItem('volare-rsvp-last',JSON.stringify({...payload,submittedAt:new Date().toISOString()}));
+        formWrap.style.display='none';
+        success.classList.add('show');
+        form.reset();
+      }catch(err){
+        submitStatus.textContent='No pudimos registrar la confirmación. Revisá tu conexión e intentá nuevamente.';
+        submitStatus.classList.add('show');
+      }finally{
+        submitButton.disabled=false;
+        submitButton.textContent=originalText;
+      }
     });
   </script>
 </body>
