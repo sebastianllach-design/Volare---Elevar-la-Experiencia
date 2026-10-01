@@ -1,16 +1,15 @@
-# Landing Encuentro Volare 30.10.2026
+# Volare Evento V6
 
-Versión conectada a Google Sheets mediante Google Apps Script.
+Landing lista para GitHub/Render.
 
-## Archivos publicados en Render
-- `index.html`
-- `assets/`
+## RSVP
+El formulario envía los datos por POST a Google Apps Script usando un iframe oculto. El registro solo se muestra como exitoso cuando Apps Script devuelve una confirmación real mediante `postMessage`.
 
-## Confirmaciones
-Endpoint configurado en `index.html`:
-`https://script.google.com/a/macros/gruposetlatam.com/s/AKfycbykezn2lqdtZwAZ9a7dtD-XhD8R-8VmNrbZB_VZYk9KFBv0n6X_SeKQxqYOQvZRFMy5oA/exec`
+## Importante
+En Apps Script, reemplazar el código por `apps-script.gs` y volver a implementar la MISMA implementación como nueva versión.
 
-La hoja destino es:
-`Confirmaciones - Encuentro Volare 30.10.2026`
+Configuración de la implementación:
+- Ejecutar como: Yo
+- Quién tiene acceso: Cualquier usuario / Anyone
 
-El archivo `apps-script.gs` contiene el código que debe estar publicado en el Apps Script asociado a la implementación web para guardar los nueve datos del formulario más fecha/hora.
+Al abrir la URL /exec en una ventana incógnita debe verse: `VOLARE RSVP OK`.

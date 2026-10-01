@@ -1,24 +1,46 @@
+const SPREADSHEET_ID = '1nfCAGkVw15bQpiQ_eKqIHnXYQdwedBISf4l1xpz-2DQ';
+const SHEET_NAME = 'Confirmaciones';
+
+function doGet() {
+  return HtmlService
+    .createHtmlOutput('<!doctype html><html><body style="font-family:Arial,sans-serif;padding:24px"><strong>VOLARE RSVP OK</strong><br>La conexión con el registro de confirmaciones está activa.</body></html>')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
 function doPost(e) {
-  const sheet = SpreadsheetApp
-    .openById('1nfCAGkVw15bQpiQ_eKqIHnXYQdwedBISf4l1xpz-2DQ')
-    .getSheetByName('Confirmaciones');
+  try {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
 
-  const data = JSON.parse(e.postData.contents || '{}');
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    if (!sheet) throw new Error('No existe la hoja "' + SHEET_NAME + '".');
 
-  sheet.appendRow([
-    new Date(),
-    data.nombre || '',
-    data.empresa || '',
-    data.email || '',
-    data.telefono || '',
-    data.rol || '',
-    data.cantidad || '1',
-    data.restricciones || '',
-    data.observaciones || '',
-    data.estado || 'Confirmada'
-  ]);
+    const p = e && e.parameter ? e.parameter : {};
 
-  return ContentService
-    .createTextOutput(JSON.stringify({ success: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+    sheet.appendRow([
+      new Date(),
+      p.nombre || '',
+      p.empresa || '',
+      p.email || '',
+      p.telefono || '',
+      p.rol || '',
+      p.cantidad || '1',
+      p.restricciones || '',
+      p.observaciones || '',
+      p.estado || 'Confirmada'
+    ]);
+
+    SpreadsheetApp.flush();
+    lock.releaseLock();
+
+    return HtmlService
+      .createHtmlOutput('<!doctype html><html><body><script>window.parent.postMessage({source:"volare-rsvp",success:true},"*");</script></body></html>')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  } catch (err) {
+    try { LockService.getScriptLock().releaseLock(); } catch (_) {}
+    const message = String(err && err.message ? err.message : err).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return HtmlService
+      .createHtmlOutput('<!doctype html><html><body><script>window.parent.postMessage({source:"volare-rsvp",success:false,message:' + JSON.stringify(message) + '},"*");</script></body></html>')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
 }

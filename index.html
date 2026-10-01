@@ -240,7 +240,7 @@
       <div id="formWrap">
         <div class="label">Confirmación de asistencia</div>
         <h3 id="modalTitle">Nos encontramos<br>el 30 de octubre.</h3>
-        <form id="rsvpForm" class="form-grid">
+        <form id="rsvpForm" class="form-grid" action="https://script.google.com/a/macros/gruposetlatam.com/s/AKfycbykezn2lqdtZwAZ9a7dtD-XhD8R-8VmNrbZB_VZYk9KFBv0n6X_SeKQxqYOQvZRFMy5oA/exec" method="post" target="rsvpTarget">
           <label>Nombre y apellido<input type="text" name="nombre" required autocomplete="name" placeholder="Tu nombre y apellido"></label>
           <label>Empresa / comercio<input type="text" name="empresa" autocomplete="organization" placeholder="Nombre de la empresa o comercio"></label>
           <label>Correo electrónico<input type="email" name="email" required autocomplete="email" placeholder="tu@email.com"></label>
@@ -249,9 +249,11 @@
           <label>Cantidad de asistentes<select name="cantidad" required><option value="1">1 persona</option><option value="2">2 personas</option><option value="3">3 personas</option><option value="4">4 personas</option><option value="5">5 personas</option></select><span class="hint">Incluyéndote a vos.</span></label>
           <label>Restricciones alimentarias<textarea name="restricciones" placeholder="Ej. celiaquía, vegetariano, alergias. Si no tenés, podés dejarlo en blanco."></textarea></label>
           <label>Observaciones<textarea name="observaciones" placeholder="Cualquier información que consideres importante para el encuentro."></textarea></label>
+          <input type="hidden" name="estado" value="Confirmada">
           <div class="submit-status" id="submitStatus" role="alert"></div>
           <button class="btn btn-gold" id="submitButton" type="submit">Confirmar asistencia</button>
         </form>
+        <iframe name="rsvpTarget" id="rsvpTarget" title="Confirmación Volare" style="display:none"></iframe>
       </div>
       <div class="success" id="success"><div class="success-mark">✓</div><h3>Asistencia registrada.</h3><p>Gracias. Nos encontramos el 30 de octubre.</p></div>
     </div>
@@ -284,44 +286,41 @@
     closeButtons.forEach(b=>b.addEventListener('click',()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}));
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}});
 
-    form.addEventListener('submit',async e=>{
-      e.preventDefault();
+    let submitTimer=null;
+
+    form.addEventListener('submit',()=>{
       submitStatus.classList.remove('show');
       submitStatus.textContent='';
       submitButton.disabled=true;
-      const originalText=submitButton.textContent;
+      submitButton.dataset.originalText=submitButton.textContent;
       submitButton.textContent='Registrando...';
 
-      const raw=Object.fromEntries(new FormData(form).entries());
-      const payload={
-        nombre:(raw.nombre||'').trim(),
-        empresa:(raw.empresa||'').trim(),
-        email:(raw.email||'').trim(),
-        telefono:(raw.telefono||'').trim(),
-        rol:raw.rol||'',
-        cantidad:raw.cantidad||'1',
-        restricciones:(raw.restricciones||'').trim(),
-        observaciones:(raw.observaciones||'').trim(),
-        estado:'Confirmada'
-      };
+      clearTimeout(submitTimer);
+      submitTimer=setTimeout(()=>{
+        submitButton.disabled=false;
+        submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
+        submitStatus.textContent='No pudimos confirmar el registro. Revisá la conexión del formulario e intentá nuevamente.';
+        submitStatus.classList.add('show');
+      },12000);
+    });
 
-      try{
-        await fetch(RSVP_ENDPOINT,{
-          method:'POST',
-          mode:'no-cors',
-          headers:{'Content-Type':'text/plain;charset=utf-8'},
-          body:JSON.stringify(payload)
-        });
-        localStorage.setItem('volare-rsvp-last',JSON.stringify({...payload,submittedAt:new Date().toISOString()}));
+    window.addEventListener('message',event=>{
+      const data=event.data||{};
+      if(data.source!=='volare-rsvp') return;
+
+      clearTimeout(submitTimer);
+      submitButton.disabled=false;
+      submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
+
+      if(data.success){
+        const raw=Object.fromEntries(new FormData(form).entries());
+        localStorage.setItem('volare-rsvp-last',JSON.stringify({...raw,submittedAt:new Date().toISOString()}));
         formWrap.style.display='none';
         success.classList.add('show');
         form.reset();
-      }catch(err){
-        submitStatus.textContent='No pudimos registrar la confirmación. Revisá tu conexión e intentá nuevamente.';
+      }else{
+        submitStatus.textContent=data.message||'No pudimos registrar la confirmación. Intentá nuevamente.';
         submitStatus.classList.add('show');
-      }finally{
-        submitButton.disabled=false;
-        submitButton.textContent=originalText;
       }
     });
   </script>
