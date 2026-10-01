@@ -13,3 +13,7 @@ Configuración de la implementación:
 - Quién tiene acceso: Cualquier usuario / Anyone
 
 Al abrir la URL /exec en una ventana incógnita debe verse: `VOLARE RSVP OK`.
+
+
+## V7
+Se corrigió la confirmación visual del RSVP. Google Apps Script registra la fila correctamente, pero algunos navegadores no entregan el postMessage de la respuesta embebida. La V7 usa también el evento load del iframe oculto como confirmación de finalización del POST, evitando mostrar un falso error cuando el registro sí fue guardado.

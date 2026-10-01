@@ -286,7 +286,24 @@
     closeButtons.forEach(b=>b.addEventListener('click',()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}));
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}});
 
+    const rsvpTarget=document.getElementById('rsvpTarget');
     let submitTimer=null;
+    let awaitingSubmission=false;
+    let submissionCompleted=false;
+
+    function showRegistrationSuccess(){
+      if(!awaitingSubmission || submissionCompleted) return;
+      submissionCompleted=true;
+      awaitingSubmission=false;
+      clearTimeout(submitTimer);
+      submitButton.disabled=false;
+      submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
+      const raw=Object.fromEntries(new FormData(form).entries());
+      localStorage.setItem('volare-rsvp-last',JSON.stringify({...raw,submittedAt:new Date().toISOString()}));
+      formWrap.style.display='none';
+      success.classList.add('show');
+      form.reset();
+    }
 
     form.addEventListener('submit',()=>{
       submitStatus.classList.remove('show');
@@ -294,31 +311,41 @@
       submitButton.disabled=true;
       submitButton.dataset.originalText=submitButton.textContent;
       submitButton.textContent='Registrando...';
+      awaitingSubmission=true;
+      submissionCompleted=false;
 
       clearTimeout(submitTimer);
       submitTimer=setTimeout(()=>{
+        if(submissionCompleted) return;
+        awaitingSubmission=false;
         submitButton.disabled=false;
         submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
-        submitStatus.textContent='No pudimos confirmar el registro. Revisá la conexión del formulario e intentá nuevamente.';
+        submitStatus.textContent='No pudimos completar el envío. Intentá nuevamente.';
         submitStatus.classList.add('show');
-      },12000);
+      },20000);
     });
 
+    // Google Apps Script puede guardar correctamente el registro pero no siempre
+    // permite que el mensaje postMessage llegue al dominio público de Render.
+    // La carga de la respuesta dentro del iframe oculto confirma que el POST finalizó.
+    rsvpTarget.addEventListener('load',()=>{
+      if(!awaitingSubmission || submissionCompleted) return;
+      // Pequeña espera para asegurar que Apps Script terminó de procesar la fila.
+      setTimeout(showRegistrationSuccess,250);
+    });
+
+    // Conservamos postMessage como confirmación adicional cuando el navegador lo permite.
     window.addEventListener('message',event=>{
       const data=event.data||{};
       if(data.source!=='volare-rsvp') return;
 
-      clearTimeout(submitTimer);
-      submitButton.disabled=false;
-      submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
-
       if(data.success){
-        const raw=Object.fromEntries(new FormData(form).entries());
-        localStorage.setItem('volare-rsvp-last',JSON.stringify({...raw,submittedAt:new Date().toISOString()}));
-        formWrap.style.display='none';
-        success.classList.add('show');
-        form.reset();
-      }else{
+        showRegistrationSuccess();
+      }else if(awaitingSubmission){
+        clearTimeout(submitTimer);
+        awaitingSubmission=false;
+        submitButton.disabled=false;
+        submitButton.textContent=submitButton.dataset.originalText||'Confirmar asistencia';
         submitStatus.textContent=data.message||'No pudimos registrar la confirmación. Intentá nuevamente.';
         submitStatus.classList.add('show');
       }
